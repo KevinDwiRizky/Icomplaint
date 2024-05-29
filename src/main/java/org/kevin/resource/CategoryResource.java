@@ -1,6 +1,7 @@
 package org.kevin.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -57,7 +58,7 @@ public class CategoryResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteCategory(@PathParam("id") Long id) {
+    public Response deleteCategory(@Valid @PathParam("id") Long id) {
         boolean deleted = categoryService.deleteCategory(id);
 
         if (deleted) {

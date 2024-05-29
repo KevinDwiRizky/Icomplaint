@@ -1,6 +1,7 @@
 package org.kevin.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -38,7 +39,7 @@ public class ComplaintResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createComplaint(ComplaintRequest complaintRequest) {
+    public Response createComplaint(@Valid ComplaintRequest complaintRequest) {
         ComplaintResponse createdComplaint = complaintService.createComplaint(complaintRequest);
 
         return Response.ok().entity(createdComplaint).build();
@@ -48,7 +49,7 @@ public class ComplaintResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateComplaint(@PathParam("id") Long id, ComplaintRequest complaintRequest) {
+    public Response updateComplaint(@Valid @PathParam("id") Long id, ComplaintRequest complaintRequest) {
         ComplaintResponse updatedComplaint = complaintService.updateComplaint(id, complaintRequest);
         if (updatedComplaint == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -60,7 +61,7 @@ public class ComplaintResource {
     @Path("/status/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changeStatusComplaintRequest(@PathParam("id") Long id, ChangeStatusComplaintRequest changeStatusComplaintRequest) {
+    public Response changeStatusComplaintRequest(@Valid @PathParam("id") Long id, ChangeStatusComplaintRequest changeStatusComplaintRequest) {
         ComplaintResponse changeStatusComplaint = complaintService.changeStatusComplaint(id, changeStatusComplaintRequest);
         if (changeStatusComplaint == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
