@@ -1,4 +1,4 @@
-package org.kevin.dto.exception;
+package org.kevin.exception;
 
 
 public class ResourceNotFoundException extends RuntimeException {
