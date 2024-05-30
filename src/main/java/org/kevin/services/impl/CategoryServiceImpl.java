@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CategoryServiceImpl implements CategoryService {
     @Inject
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public List<CategoryResponse> getAllcategory() {

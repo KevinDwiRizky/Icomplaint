@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ComplaintServiceImpl implements ComplaintService {
     @Inject
-    ComplaintRepository complaintRepository;
+    private ComplaintRepository complaintRepository;
 
     @Inject
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Inject
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public List<ComplaintResponse> getAllComplaint() {

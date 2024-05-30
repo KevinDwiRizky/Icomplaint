@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Inject
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
 
     @Override
     public List<UserResponse> getAllUsers() {
+
         List<User> users = userRepository.listAll();
         return users.stream()
                 .map(user -> UserResponse.builder()

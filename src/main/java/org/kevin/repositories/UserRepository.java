@@ -6,4 +6,7 @@ import org.kevin.entities.User;
 
 @ApplicationScoped
 public class UserRepository implements PanacheRepository<User> {
+
+
+
 }

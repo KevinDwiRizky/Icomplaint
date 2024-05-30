@@ -16,7 +16,7 @@ import java.util.List;
 @Path("/complaint")
 public class ComplaintResource {
     @Inject
-    ComplaintService complaintService;
+    private ComplaintService complaintService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

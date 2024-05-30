@@ -14,7 +14,7 @@ import java.util.List;
 @Path("/category")
 public class CategoryResource {
     @Inject
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
