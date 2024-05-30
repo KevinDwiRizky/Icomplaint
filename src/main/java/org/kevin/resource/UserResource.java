@@ -1,76 +1,95 @@
 package org.kevin.resource;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kevin.dto.request.UserRequest;
 import org.kevin.dto.response.UserResponse;
-import org.kevin.entities.User;
+import org.kevin.dto.response.WebResponse;
 import org.kevin.services.UserService;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import java.net.URI;
 import java.util.List;
 
-@ApplicationScoped
 @Path("/user")
 public class UserResource {
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<UserResponse> getUsers() {
-        return userService.getAllUsers();
+    public WebResponse<List<UserResponse>> getUsers() {
+        List<UserResponse> users = userService.getAllUsers();
+        return WebResponse.<List<UserResponse>>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("Users found")
+                .data(users)
+                .build();
     }
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudentById(@PathParam("id") Long id) {
+    public WebResponse<UserResponse> getUserById(@PathParam("id") Long id) {
         UserResponse user = userService.getUserById(id);
         if (user == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return WebResponse.<UserResponse>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("User not found")
+                    .build();
         }
-        return Response.ok(user).build();
+        return WebResponse.<UserResponse>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("User found")
+                .data(user)
+                .build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid UserRequest userRequest) {
-        UserResponse createdStudent = userService.createUser(userRequest);
-
-        return Response.ok().entity(createdStudent).build();
+    public WebResponse<UserResponse> createUser(@Valid UserRequest userRequest) {
+        UserResponse createdUser = userService.createUser(userRequest);
+        return WebResponse.<UserResponse>builder()
+                .status(Response.Status.CREATED.getStatusCode())
+                .message("User created successfully")
+                .data(createdUser)
+                .build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@Valid @PathParam("id") Long id, UserRequest userRequest) {
+    public WebResponse<UserResponse> updateUser(@PathParam("id") Long id, @Valid UserRequest userRequest) {
         UserResponse updatedUser = userService.updateUser(id, userRequest);
         if (updatedUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return WebResponse.<UserResponse>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("User not found")
+                    .build();
         }
-        return Response.ok(updatedUser).build();
+        return WebResponse.<UserResponse>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("User updated successfully")
+                .data(updatedUser)
+                .build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deleteUser(@PathParam("id") Long id) {
+    public WebResponse<Void> deleteUser(@PathParam("id") Long id) {
         boolean deleted = userService.deleteUser(id);
-
         if (deleted) {
-            return Response.ok().build();
+            return WebResponse.<Void>builder()
+                    .status(Response.Status.OK.getStatusCode())
+                    .message("User deleted successfully")
+                    .build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return WebResponse.<Void>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("User not found")
+                    .build();
         }
     }
-
-
 }

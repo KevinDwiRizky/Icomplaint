@@ -5,11 +5,10 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.kevin.dto.request.CategoryRequest;
 import org.kevin.dto.request.ChangeStatusComplaintRequest;
 import org.kevin.dto.request.ComplaintRequest;
-import org.kevin.dto.response.CategoryResponse;
 import org.kevin.dto.response.ComplaintResponse;
+import org.kevin.dto.response.WebResponse;
 import org.kevin.services.ComplaintService;
 
 import java.util.List;
@@ -21,64 +20,97 @@ public class ComplaintResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ComplaintResponse> getComplaint() {
-        return complaintService.getAllComplaint();
+    public WebResponse<List<ComplaintResponse>> getComplaints() {
+        List<ComplaintResponse> complaints = complaintService.getAllComplaint();
+        return WebResponse.<List<ComplaintResponse>>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("Complaints found")
+                .data(complaints)
+                .build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getComplaintById(@PathParam("id") Long id) {
-        ComplaintResponse comlaint = complaintService.getComplaintById(id);
-        if (comlaint == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    public WebResponse<ComplaintResponse> getComplaintById(@PathParam("id") Long id) {
+        ComplaintResponse complaint = complaintService.getComplaintById(id);
+        if (complaint == null) {
+            return WebResponse.<ComplaintResponse>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("Complaint not found")
+                    .build();
         }
-        return Response.ok(comlaint).build();
+        return WebResponse.<ComplaintResponse>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("Complaint found")
+                .data(complaint)
+                .build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createComplaint(@Valid ComplaintRequest complaintRequest) {
+    public WebResponse<ComplaintResponse> createComplaint(@Valid ComplaintRequest complaintRequest) {
         ComplaintResponse createdComplaint = complaintService.createComplaint(complaintRequest);
-
-        return Response.ok().entity(createdComplaint).build();
+        return WebResponse.<ComplaintResponse>builder()
+                .status(Response.Status.CREATED.getStatusCode())
+                .message("Complaint created successfully")
+                .data(createdComplaint)
+                .build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateComplaint(@Valid @PathParam("id") Long id, ComplaintRequest complaintRequest) {
+    public WebResponse<ComplaintResponse> updateComplaint(@PathParam("id") Long id, @Valid ComplaintRequest complaintRequest) {
         ComplaintResponse updatedComplaint = complaintService.updateComplaint(id, complaintRequest);
         if (updatedComplaint == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return WebResponse.<ComplaintResponse>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("Complaint not found")
+                    .build();
         }
-        return Response.ok(updatedComplaint).build();
+        return WebResponse.<ComplaintResponse>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("Complaint updated successfully")
+                .data(updatedComplaint)
+                .build();
     }
 
     @PUT
     @Path("/status/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changeStatusComplaintRequest(@Valid @PathParam("id") Long id, ChangeStatusComplaintRequest changeStatusComplaintRequest) {
-        ComplaintResponse changeStatusComplaint = complaintService.changeStatusComplaint(id, changeStatusComplaintRequest);
-        if (changeStatusComplaint == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    public WebResponse<ComplaintResponse> changeStatusComplaint(@PathParam("id") Long id, @Valid ChangeStatusComplaintRequest changeStatusComplaintRequest) {
+        ComplaintResponse changedStatusComplaint = complaintService.changeStatusComplaint(id, changeStatusComplaintRequest);
+        if (changedStatusComplaint == null) {
+            return WebResponse.<ComplaintResponse>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("Complaint not found")
+                    .build();
         }
-        return Response.ok(changeStatusComplaint).build();
+        return WebResponse.<ComplaintResponse>builder()
+                .status(Response.Status.OK.getStatusCode())
+                .message("Complaint status changed successfully")
+                .data(changedStatusComplaint)
+                .build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deleteComplaint(@PathParam("id") Long id) {
+    public WebResponse<Void> deleteComplaint(@PathParam("id") Long id) {
         boolean deleted = complaintService.deleteComplaint(id);
-
         if (deleted) {
-            return Response.ok().build();
+            return WebResponse.<Void>builder()
+                    .status(Response.Status.OK.getStatusCode())
+                    .message("Complaint deleted successfully")
+                    .build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return WebResponse.<Void>builder()
+                    .status(Response.Status.NOT_FOUND.getStatusCode())
+                    .message("Complaint not found")
+                    .build();
         }
     }
-
 }
