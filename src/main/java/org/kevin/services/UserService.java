@@ -11,7 +11,7 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(Long id);
     Optional<User> findEmail(String email);
-    UserResponse createUser(UserRequest userRequest);
+    UserResponse createAdmin(UserRequest userRequest);
     UserResponse updateUser(Long id, UserRequest userRequest);
     boolean deleteUser(Long id);
 

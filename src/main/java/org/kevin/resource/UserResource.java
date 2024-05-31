@@ -52,11 +52,11 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public WebResponse<UserResponse> createUser(@Valid UserRequest userRequest) {
-        UserResponse createdUser = userService.createUser(userRequest);
+        UserResponse createdAdmin = userService.createAdmin(userRequest);
         return WebResponse.<UserResponse>builder()
                 .status(Response.Status.CREATED.getStatusCode())
-                .message("User created successfully")
-                .data(createdUser)
+                .message("Admin created successfully")
+                .data(createdAdmin)
                 .build();
     }
 

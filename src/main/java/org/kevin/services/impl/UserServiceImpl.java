@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse createUser(UserRequest userRequest) {
+    public UserResponse createAdmin(UserRequest userRequest) {
         String hashPassword = PasswordUtils.hashPassword(userRequest.getPassword());
 
         User user = User.builder()
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRequest.getEmail())
                 .address(userRequest.getAddress())
                 .phoneNumber(userRequest.getPhoneNumber())
-                .role(RoleEnum.USER)
+                .role(RoleEnum.ADMIN)
                 .password(hashPassword)
                 .build();
 

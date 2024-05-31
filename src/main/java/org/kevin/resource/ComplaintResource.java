@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kevin.dto.request.ChangeStatusComplaintRequest;
 import org.kevin.dto.request.ComplaintRequest;
+import org.kevin.dto.request.CreateComplaintRequest;
 import org.kevin.dto.response.ComplaintResponse;
 import org.kevin.dto.response.WebResponse;
 import org.kevin.services.ComplaintService;
@@ -52,7 +53,7 @@ public class ComplaintResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("USER")
-    public WebResponse<ComplaintResponse> createComplaint(@Valid ComplaintRequest complaintRequest) {
+    public WebResponse<ComplaintResponse> createComplaint(@Valid CreateComplaintRequest complaintRequest) {
         ComplaintResponse createdComplaint = complaintService.createComplaint(complaintRequest);
         return WebResponse.<ComplaintResponse>builder()
                 .status(Response.Status.CREATED.getStatusCode())
