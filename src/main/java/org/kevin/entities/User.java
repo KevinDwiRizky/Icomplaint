@@ -25,4 +25,5 @@ public class User {
     public String address;
     @Enumerated(EnumType.STRING)
     public RoleEnum role;
+    public String password;
 }

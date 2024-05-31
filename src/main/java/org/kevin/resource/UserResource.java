@@ -1,5 +1,6 @@
 package org.kevin.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -19,6 +20,7 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public WebResponse<List<UserResponse>> getUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return WebResponse.<List<UserResponse>>builder()

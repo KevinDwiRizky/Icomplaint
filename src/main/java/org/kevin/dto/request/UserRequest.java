@@ -25,4 +25,8 @@ public class UserRequest {
     @NotBlank(message = "Address tidak boleh kosong")
     @Size(max = 1000, message = "Address tidak boleh lebih dari 1000 karakter")
     private String address;
+
+    @NotBlank(message = "Password tidak boleh kosong")
+    @Size(max = 1000, message = "Password tidak boleh lebih dari 1000 karakter")
+    private String password;
 }

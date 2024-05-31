@@ -9,8 +9,10 @@ import org.kevin.entities.User;
 import org.kevin.entities.enumPack.RoleEnum;
 import org.kevin.repositories.UserRepository;
 import org.kevin.services.UserService;
+import org.kevin.utils.PasswordUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -54,13 +56,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public Optional<User> findEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional
     public UserResponse createUser(UserRequest userRequest) {
+        String hashPassword = PasswordUtils.hashPassword(userRequest.getPassword());
+
         User user = User.builder()
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
                 .address(userRequest.getAddress())
                 .phoneNumber(userRequest.getPhoneNumber())
                 .role(RoleEnum.USER)
+                .password(hashPassword)
                 .build();
 
         userRepository.persist(user);
