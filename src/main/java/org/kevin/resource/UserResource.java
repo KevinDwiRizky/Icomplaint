@@ -20,7 +20,7 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
+    @RolesAllowed("ADMIN")
     public WebResponse<List<UserResponse>> getUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return WebResponse.<List<UserResponse>>builder()
@@ -32,6 +32,7 @@ public class UserResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public WebResponse<UserResponse> getUserById(@PathParam("id") Long id) {
         UserResponse user = userService.getUserById(id);
         if (user == null) {
@@ -63,6 +64,7 @@ public class UserResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<UserResponse> updateUser(@PathParam("id") Long id, @Valid UserRequest userRequest) {
         UserResponse updatedUser = userService.updateUser(id, userRequest);
         if (updatedUser == null) {
@@ -80,6 +82,7 @@ public class UserResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public WebResponse<Void> deleteUser(@PathParam("id") Long id) {
         boolean deleted = userService.deleteUser(id);
         if (deleted) {

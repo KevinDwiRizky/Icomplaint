@@ -1,5 +1,6 @@
 package org.kevin.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -50,6 +51,7 @@ public class ComplaintResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public WebResponse<ComplaintResponse> createComplaint(@Valid ComplaintRequest complaintRequest) {
         ComplaintResponse createdComplaint = complaintService.createComplaint(complaintRequest);
         return WebResponse.<ComplaintResponse>builder()
@@ -63,6 +65,7 @@ public class ComplaintResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public WebResponse<ComplaintResponse> updateComplaint(@PathParam("id") Long id, @Valid ComplaintRequest complaintRequest) {
         ComplaintResponse updatedComplaint = complaintService.updateComplaint(id, complaintRequest);
         if (updatedComplaint == null) {
@@ -82,6 +85,7 @@ public class ComplaintResource {
     @Path("/status/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<ComplaintResponse> changeStatusComplaint(@PathParam("id") Long id, @Valid ChangeStatusComplaintRequest changeStatusComplaintRequest) {
         ComplaintResponse changedStatusComplaint = complaintService.changeStatusComplaint(id, changeStatusComplaintRequest);
         if (changedStatusComplaint == null) {
@@ -99,6 +103,7 @@ public class ComplaintResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public WebResponse<Void> deleteComplaint(@PathParam("id") Long id) {
         boolean deleted = complaintService.deleteComplaint(id);
         if (deleted) {

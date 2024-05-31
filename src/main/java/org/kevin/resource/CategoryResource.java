@@ -1,4 +1,5 @@
 package org.kevin.resource;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -30,6 +31,7 @@ public class CategoryResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<CategoryResponse> getCategoryById(@PathParam("id") Long id) {
         CategoryResponse category = categoryService.getCategoryById(id);
         if (category == null) {
@@ -48,6 +50,7 @@ public class CategoryResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<CategoryResponse> createCategory(CategoryRequest categoryRequest) {
         CategoryResponse createdCategory = categoryService.createCategory(categoryRequest);
         return WebResponse.<CategoryResponse>builder()
@@ -61,6 +64,7 @@ public class CategoryResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<CategoryResponse> updateCategory(@PathParam("id") Long id, CategoryRequest categoryRequest) {
         CategoryResponse updatedCategory = categoryService.updateCategory(id, categoryRequest);
         if (updatedCategory == null) {
@@ -78,6 +82,7 @@ public class CategoryResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public WebResponse<Void> deleteCategory(@Valid @PathParam("id") Long id) {
         boolean deleted = categoryService.deleteCategory(id);
         if (deleted) {
