@@ -22,6 +22,7 @@ public class ComplaintResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public WebResponse<List<ComplaintResponse>> getComplaints() {
         List<ComplaintResponse> complaints = complaintService.getAllComplaint();
         return WebResponse.<List<ComplaintResponse>>builder()
