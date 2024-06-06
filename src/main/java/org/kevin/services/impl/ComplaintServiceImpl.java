@@ -159,15 +159,12 @@ public class ComplaintServiceImpl implements ComplaintService {
             throw new ResourceNotFoundException("Complaint not found with ID: " + id);
         }
 
-        if (Objects.equals(changeStatusComplaintRequest.getStatus(), "IN_PROGRESS")) {
-            complaint.setStatus(StatusEnum.IN_PROGRESS);
-        } else if (Objects.equals(changeStatusComplaintRequest.getStatus(), "RESOLVED")) {
-            complaint.setStatus(StatusEnum.RESOLVED);
-        } else if (Objects.equals(changeStatusComplaintRequest.getStatus(), "REJECTED")) {
-            complaint.setStatus(StatusEnum.REJECTED);
-        } else {
-            throw new ResourceNotFoundException("Complaint status not found with !");
+        StatusEnum newStatus = changeStatusComplaintRequest.getStatus();
+        if (newStatus == null) {
+            throw new IllegalArgumentException("Status cannot be null");
         }
+
+        complaint.setStatus(newStatus);
         complaintRepository.persist(complaint);
 
         return ComplaintResponse.builder()

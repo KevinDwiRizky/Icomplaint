@@ -19,7 +19,6 @@ public class CategoryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("ADMIN")
     public WebResponse<List<CategoryResponse>> getCategory() {
         List<CategoryResponse> categories = categoryService.getAllcategory();
         return WebResponse.<List<CategoryResponse>>builder()
