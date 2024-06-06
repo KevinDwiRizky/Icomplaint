@@ -2,6 +2,7 @@ package org.kevin.services.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.kevin.dto.request.CreateComplaintRequest;
 import org.kevin.exception.ResourceNotFoundException;
@@ -40,6 +41,9 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Inject
     private JwtUtils jwtUtils;
+
+    @Inject
+    EntityManager entityManager;
 
     @Override
     public List<ComplaintResponse> getAllComplaint() {
@@ -152,8 +156,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+    @Transactional
     public ComplaintResponse changeStatusComplaint(Long id, ChangeStatusComplaintRequest changeStatusComplaintRequest) {
-
         Complaint complaint = complaintRepository.findById(id);
         if (complaint == null) {
             throw new ResourceNotFoundException("Complaint not found with ID: " + id);
@@ -165,7 +169,12 @@ public class ComplaintServiceImpl implements ComplaintService {
         }
 
         complaint.setStatus(newStatus);
-        complaintRepository.persist(complaint);
+
+        // 2. Panggil metode merge()
+        complaint = entityManager.merge(complaint);
+
+        // 3. Flush EntityManager
+        entityManager.flush();
 
         return ComplaintResponse.builder()
                 .id(complaint.getId())
@@ -178,7 +187,6 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .category(complaint.getCategory())
                 .build();
     }
-
     @Override
     @Transactional
     public boolean deleteComplaint(Long id) {
